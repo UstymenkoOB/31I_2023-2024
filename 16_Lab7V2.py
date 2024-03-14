@@ -1,3 +1,4 @@
+#Савченко Валентина 31І
 from turtle import *
 
 speed(0)
