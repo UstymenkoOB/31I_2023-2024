@@ -1,10 +1,8 @@
 from turtle import *
 import random
 
-turtle = Turtle()
 speed(10)
-color("blue")
-
+pensize(10)
 for i in range(9):
     r = random.random()
     g = random.random()
