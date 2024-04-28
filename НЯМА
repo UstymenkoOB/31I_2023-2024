@@ -1,0 +1,115 @@
+import tkinter as tk
+from tkinter import ttk
+from PIL import Image, ImageTk
+
+
+product_calories = {
+"Бренді":	225,
+"Вермут":	155,
+"Вино жінці":	66,
+"Вино напівсухе":	78,
+"Вино десертні":	175,
+"Вино полусолодке":	88,
+"Вино столове":	67,
+"Віскі":	222,
+"Горілка":	234,
+"Джин":	223,
+"Коньяк":	240,
+"Лікер":	344,
+"Пиво": 	37,
+"Пиво темне":	39,
+"Портвейн":	167,
+"Ром":	217,
+"Шампанське":	88,
+"Абрикосовий сік":	39,
+"Ананасовий сік":	48,
+"Апельсиновий сік":	36,
+"Виноградний сік":	56,
+"Вишневий сік":	49,
+"Гранатовий сік":	58,
+"Какао на молоці":	377,
+"Квас хлібний":	26,
+"Кола":	40,
+"Кави з молоком":	56,
+"Лімонад	24":    22,
+"Лімонний сік":	18,
+"Морквяний сік":	31,
+"Персиковий сік":	37,
+"Пиво безалкогольне":	22,
+    }
+
+
+
+'''
+# Define a dictionary of product calorie content
+product_calories = {}
+
+# Open the text file in read mode
+with open('cal.txt', 'r') as file:
+    # Read the contents of the file
+    data = file.readlines()
+
+# Iterate through the lines in the file
+for line in data:
+    # Split the line by a delimiter (such as a tab)
+    name, calories = line.strip().split('/t')
+    # Add the name and calories to the dictionary
+    product_calories[name] = int(calories)
+'''
+# Define a function to get the calorie content of a product
+def get_calories(product):
+  if product in product_calories:
+    return product_calories[product]
+  else:
+    return None
+
+# Create a new Tkinter window
+root = tk.Tk()
+root.geometry('1000x700')
+
+# Load the background image
+bg_image = Image.open('background.jpg')
+bg_image = bg_image.resize((1000, 700))
+bg_photo = ImageTk.PhotoImage(bg_image)
+
+# Set the background image of the window
+background_label = ttk.Label(root, image=bg_photo)
+background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+# Create a label and text input field for the product name
+product_label = ttk.Label(root, text="Введіть назву продукту:", style='My.TLabel')
+product_label.pack(pady=20)
+product_entry = ttk.Entry(root, width=30, style='My.TEntry')
+product_entry.pack(pady=20)
+
+# Create a button that will call the on_button_click function when clicked
+button = ttk.Button(root, text="Отримати калорії", command=lambda: on_button_click(product_entry.get()), style='My.TButton')
+button.pack(pady=20)
+
+# Define a function to handle the button click
+def on_button_click(product):
+  # Calculate the calorie content of the product
+  calories = get_calories(product)
+
+  # Display the calorie content on the screen
+  if calories is not None:
+    result_label.config(text=f"{product} має {calories} калорій.", style='My.TLabel')
+  else:
+    result_label.config(text=f"На жаль, ми не маємо калорійну інформацію про {product}.", style='My.TLabel')
+
+# Create a label to display the calorie content
+result_label = ttk.Label(root, text="", style='My.TLabel')
+result_label.pack(pady=20)
+
+# Create a style for the widgets
+style = ttk.Style()
+style.theme_create('My', parent='clam', settings={
+    'TLabel': {'configure': {'font': ('Helvetica', 18), 'foreground': '#333', 'padding': [10, 2]} },
+    'TEntry': {'configure': {'font': ('Helvetica', 18), 'foreground': '#333', 'padding': [10, 2]} },
+    'TButton': {'configure': {'font': ('Helvetica', 18), 'foreground': '#333', 'padding': [10, 2]} },
+    'TLabelframe': {'configure': {'font': ('Helvetica', 18), 'foreground': '#333', 'background': '#f0f0f0'}}
+})
+style.theme_use('My')
+
+# Run the Tkinter main loop
+root.mainloop()
