@@ -1,0 +1,48 @@
+"""
+Написати програму для пошуку найкоротшого шляху з
+кожної вершинидо всіх інших вершин
+
+Автор: Новосад Сніжана
+"""
+
+import heapq
+
+def dijkstra(graph, start):
+
+    distances = {vertex: float('infinity') for vertex in graph}
+    distances[start] = 0
+    priority_queue = [(0, start)]
+    while priority_queue:
+        current_distance, current_vertex = heapq.heappop(priority_queue)
+        
+        if current_distance > distances[current_vertex]:
+            continue
+        
+        for neighbor, weight in graph[current_vertex].items():
+            distance = current_distance + weight
+            
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(priority_queue, (distance, neighbor))
+    
+    return distances
+
+def find_all_shortest_paths(graph):
+    shortest_paths = {}
+    for vertex in graph:
+        shortest_paths[vertex] = dijkstra(graph, vertex)
+    return shortest_paths
+
+graph = {
+    'a': {'h': 3, 'b': 2, 'c': 1},
+    'b': {'a': 2, 'd': 2},
+    'c': {'a': 1, 'f': 3},
+    'd': {'b': 2, 'g': 1},
+    'f': {'c': 3, 'g': 2, 'h': 2},
+    'g': {'f': 2, 'd': 1},
+    'h': {'a': 3, 'f': 2}
+}
+
+shortest_paths = find_all_shortest_paths(graph)
+for vertex, distances in shortest_paths.items():
+    print(f"Shortest paths from vertex {vertex}: {distances}")
